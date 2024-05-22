@@ -1,0 +1,115 @@
+package com.model;
+
+import java.util.Date;
+import javax.persistence.*;
+import org.mindrot.jbcrypt.BCrypt;
+
+@Entity
+public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int studId;
+    private String studName;
+    private long phNo;
+    private String gender;
+    private String country;
+    private Date doj;
+    @Column(unique = true)
+    private String emailId;
+    private String password;
+    private String otp;
+
+    @ManyToOne
+    @JoinColumn(name = "courseId", nullable = false)
+    private Course course;
+
+    // Getters and Setters
+    public int getStudId() {
+        return studId;
+    }
+
+    public void setStudId(int studId) {
+        this.studId = studId;
+    }
+
+    public String getStudName() {
+        return studName;
+    }
+
+    public void setStudName(String studName) {
+        this.studName = studName;
+    }
+
+    public long getPhNo() {
+        return phNo;
+    }
+
+    public void setPhNo(long phNo) {
+        this.phNo = phNo;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public Date getDoj() {
+        return doj;
+    }
+
+    public void setDoj(Date doj) {
+        this.doj = doj;
+    }
+
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    public boolean checkPassword(String passwordToCheck) {
+        return BCrypt.checkpw(passwordToCheck, this.password);
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public int getCourseId() {
+        return course.getCourseId();
+    }
+}

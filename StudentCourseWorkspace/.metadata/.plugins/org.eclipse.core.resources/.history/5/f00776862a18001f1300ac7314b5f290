@@ -1,0 +1,71 @@
+package com.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.dao.StudentRepository;
+import com.model.Student;
+import com.model.Course;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class StudentService {
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private CourseService courseService;
+
+    public Student studLogin(String uniqueStudentCode, String dateOfBirth) {
+        Student student = studentRepository.findByUniqueStudentCode(uniqueStudentCode);
+        if (student != null && student.getDateOfBirth().equals(dateOfBirth)) {
+            return student;
+        }
+        return null;
+    }
+
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
+    }
+
+    public Student getStudentById(int studId) {
+        Optional<Student> student = studentRepository.findById(studId);
+        return student.orElse(null);
+    }
+
+    public List<Student> getStudentByName(String studName) {
+        return studentRepository.findByStudNameContainingIgnoreCase(studName);
+    }
+
+    public Student addStudent(Student student) {
+        return studentRepository.save(student);
+    }
+
+    public Student updateStudent(Student student) {
+        return studentRepository.save(student);
+    }
+
+    public void deleteStudentById(int studId) {
+        studentRepository.deleteById(studId);
+    }
+
+    public void assignCourseToStudent(int studId, int courseId) {
+        Student student = getStudentById(studId);
+        Course course = courseService.getCourseById(courseId);
+        if (student != null && course != null) {
+            student.getCourses().add(course);
+            studentRepository.save(student);
+        }
+    }
+
+    public void removeCourseFromStudent(int studId, int courseId) {
+        Student student = getStudentById(studId);
+        Course course = courseService.getCourseById(courseId);
+        if (student != null && course != null) {
+            student.getCourses().remove(course);
+            studentRepository.save(student);
+        }
+    }
+}

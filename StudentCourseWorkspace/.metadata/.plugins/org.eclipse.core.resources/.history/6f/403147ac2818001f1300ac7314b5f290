@@ -1,0 +1,33 @@
+package com.service;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.model.Course;
+
+@Service
+public class CourseService {
+
+    @Autowired
+    private CourseDao courseDao;
+
+    public List<Course> getAllCourses() {
+        return courseDao.getAllCourses();
+    }
+
+    public Course getCourseById(int courseId) {
+        return courseDao.getCourseById(courseId);
+    }
+
+    public Course addCourse(Course course) {
+        return courseDao.addCourse(course);
+    }
+
+    public Course updateCourse(Course course) {
+        return courseDao.updateCourse(course);
+    }
+
+    public void deleteCourseById(int courseId) {
+        courseDao.deleteCourseById(courseId);
+    }
+}

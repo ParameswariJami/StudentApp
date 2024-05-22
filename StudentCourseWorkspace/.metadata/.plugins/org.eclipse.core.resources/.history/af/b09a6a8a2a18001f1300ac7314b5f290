@@ -1,0 +1,112 @@
+package com.model;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int studId;
+    private String studName;
+    private String dateOfBirth;
+    private String gender;
+    private String uniqueStudentCode;
+    private String email;
+    private String mobileNumber;
+    private String parentsName;
+    private String password;
+
+    @ManyToMany
+    @JoinTable(
+        name = "student_course",
+        joinColumns = @JoinColumn(name = "stud_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private Set<Course> courses = new HashSet<>();
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<StudentAddress> addresses = new HashSet<>();
+
+    public int getStudId() {
+        return studId;
+    }
+
+    public void setStudId(int studId) {
+        this.studId = studId;
+    }
+
+    public String getStudName() {
+        return studName;
+    }
+
+    public void setStudName(String studName) {
+        this.studName = studName;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getUniqueStudentCode() {
+        return uniqueStudentCode;
+    }
+
+    public void setUniqueStudentCode(String uniqueStudentCode) {
+        this.uniqueStudentCode = uniqueStudentCode;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+    }
+
+    public String getParentsName() {
+        return parentsName;
+    }
+
+    public void setParentsName(String parentsName) {
+        this.parentsName = parentsName;
+    }
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
+
+    public Set<StudentAddress> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(Set<StudentAddress> addresses) {
+        this.addresses = addresses;
+    }
+}

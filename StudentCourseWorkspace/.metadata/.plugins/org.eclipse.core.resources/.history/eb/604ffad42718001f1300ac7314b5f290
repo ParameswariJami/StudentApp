@@ -1,0 +1,50 @@
+package com.service;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.dao.StudentRepository;
+import com.model.Student;
+
+@Service
+public class StudentService {
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    public Student studLogin(String emailId, String password) {
+        Student student = studentRepository.findByEmail(emailId);
+        if (student != null && student.checkPassword(password)) {
+            return student;
+        }
+        return null;
+    }
+
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
+    }
+
+    public Student getStudentById(int studId) {
+        return studentRepository.findById(studId).orElse(null);
+    }
+
+    public List<Student> getStudentByName(String studName) {
+        return studentRepository.findByName(studName);
+    }
+
+    public Student getStudentByEmail(String emailId) {
+        return studentRepository.findByEmail(emailId);
+    }
+
+    public Student addStudent(Student student) {
+        return studentRepository.save(student);
+    }
+
+    public Student updateStudent(Student student) {
+        return studentRepository.save(student);
+    }
+
+    public void deleteStudentById(int studId) {
+        studentRepository.deleteById(studId);
+    }
+}

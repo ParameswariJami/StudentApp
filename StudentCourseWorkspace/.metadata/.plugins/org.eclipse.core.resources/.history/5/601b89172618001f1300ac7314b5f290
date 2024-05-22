@@ -1,0 +1,101 @@
+package com.controller;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import com.service.StudentService;
+import com.service.CourseService;
+import com.model.Student;
+import com.model.Course;
+
+@RestController
+@RequestMapping("/students")
+public class StudentController {
+
+    @Autowired
+    private StudentService studentService;
+
+    @Autowired
+    private CourseService courseService;
+
+    @PostMapping("/login")
+    public ResponseEntity<Student> studLogin(@RequestParam String emailId, @RequestParam String password) {
+        Student student = studentService.studLogin(emailId, password);
+        if (student != null) {
+            return ResponseEntity.ok(student);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Student>> getAllStudents() {
+        List<Student> students = studentService.getAllStudents();
+        return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Student> getStudentById(@PathVariable("id") int studId) {
+        Student student = studentService.getStudentById(studId);
+        if (student != null) {
+            return ResponseEntity.ok(student);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Student>> getStudentByName(@RequestParam String name) {
+        List<Student> students = studentService.getStudentByName(name);
+        return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<Student> getStudentByEmail(@RequestParam String emailId) {
+        Student student = studentService.getStudentByEmail(emailId);
+        if (student != null) {
+            return ResponseEntity.ok(student);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    @PostMapping
+    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
+        try {
+            Course course = courseService.getCourseById(student.getCourseId());
+            if (course != null) {
+                student.setCourse(course);
+                Student savedStudent = studentService.addStudent(student);
+                return ResponseEntity.status(HttpStatus.CREATED).body(savedStudent);
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable("id") int studId, @RequestBody Student student) {
+        Student existingStudent = studentService.getStudentById(studId);
+        if (existingStudent != null) {
+            student.setStudId(studId);
+            Student updatedStudent = studentService.updateStudent(student);
+            return ResponseEntity.ok(updatedStudent);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable("id") int studId) {
+        Student student = studentService.getStudentById(studId);
+        if (student != null) {
+            studentService.deleteStudentById(studId);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+}
+
+   

@@ -1,0 +1,34 @@
+package com.service;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.dao.StudentAddressDao;
+import com.model.StudentAddress;
+
+@Service
+public class StudentAddressService {
+
+    @Autowired
+    private StudentAddressDao addressDao;
+
+    public List<StudentAddress> getAllAddresses() {
+        return addressDao.getAllAddresses();
+    }
+
+    public StudentAddress getAddressById(int addressId) {
+        return addressDao.getAddressById(addressId);
+    }
+
+    public StudentAddress addAddress(StudentAddress address) {
+        return addressDao.addAddress(address);
+    }
+
+    public StudentAddress updateAddress(StudentAddress address) {
+        return addressDao.updateAddress(address);
+    }
+
+    public void deleteAddressById(int addressId) {
+        addressDao.deleteAddressById(addressId);
+    }
+}

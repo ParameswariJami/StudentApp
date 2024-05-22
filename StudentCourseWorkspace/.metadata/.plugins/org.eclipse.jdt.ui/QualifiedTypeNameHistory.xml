@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="javax.persistence.GenerationType"/>
+<fullyQualifiedTypeName name="org.mindrot.jbcrypt.BCrypt"/>
+<fullyQualifiedTypeName name="com.service.EmailService"/>
+<fullyQualifiedTypeName name="com.service.OTPService"/>
+<fullyQualifiedTypeName name="org.hibernate.annotations.GenericGenerator"/>
+</qualifiedTypeNameHistroy>

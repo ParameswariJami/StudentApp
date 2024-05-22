@@ -1,0 +1,56 @@
+package com.dao;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.model.Student;
+import com.repository.StudentRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+@Service
+public class StudentDao {
+
+    @Autowired
+    private StudentRepository studRepo;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public Student studLogin(String emailId, String password) {
+        Student student = studRepo.findByEmail(emailId);
+        if (student != null && bCryptPasswordEncoder.matches(password, student.getPassword())) {
+            return student;
+        }
+        return null;
+    }
+
+    public List<Student> getAllStudents() {
+        return studRepo.findAll();
+    }
+
+    public Student getStudentById(int studId) {
+        return studRepo.findById(studId).orElse(null);
+    }
+
+    public List<Student> getStudentByName(String studName) {
+        return studRepo.findByStudNameContainingIgnoreCase(studName);
+    }
+
+    public Student getStudentByEmail(String emailId) {
+        return studRepo.findByEmail(emailId);
+    }
+
+    public Student addStudent(Student stud) {
+        stud.setPassword(bCryptPasswordEncoder.encode(stud.getPassword()));
+        return studRepo.save(stud);
+    }
+
+    public Student updateStudent(Student stud) {
+        stud.setPassword(bCryptPasswordEncoder.encode(stud.getPassword()));
+        return studRepo.save(stud);
+    }
+
+    public void deleteStudentById(int studId) {
+        studRepo.deleteById(studId);
+    }
+}
